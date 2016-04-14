@@ -65,7 +65,7 @@ function databaseHelper() {
       var elements = _all();
       for(var i = 0; i < elements.length; i++) {
         if(elements[i][_id].toString() === id) {
-          return elements[i];
+          return _shallowClone(elements[i]);
         }
       }
     }
