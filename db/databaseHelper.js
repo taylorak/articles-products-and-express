@@ -73,13 +73,14 @@ function databaseHelper() {
     function _editById(id, obj) {
 
       var element = _getById(id);
-
+      console.log('poop',obj);
       Object.keys(obj).forEach(function(key) {
         if(element.hasOwnProperty(key)) {
+          console.log('here');
           element[key] = obj[key];
         }
       });
-
+      console.log(_db);
       return true;
     }
 

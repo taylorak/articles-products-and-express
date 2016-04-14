@@ -10,7 +10,17 @@ var articles = databaseHelper.model('article', {
 });
 
 router.get('/:title/edit', function(req, res) {
+  var article = articles.getById(req.params.title);
+  var articlesCopy = {
+    title: articles.title,
+    body: articles.body,
+    author: articles.author
+  };
 
+  res.render('edit', {
+    editItem: articlesCopy,
+    path: '/articles/'+req.params.title
+  });
 });
 
 router.get('/new', function(req, res) {
@@ -22,10 +32,12 @@ router.get('/new', function(req, res) {
 
 router.route('/:title')
   .put(function(req, res) {
-
+    articles.editById(req.params.title, req.body);
+    res.redirect('/articles');
   })
   .delete(function(req, res) {
-
+    articles.deleteById(req.params.title);
+    res.json({success: true});
   });
 
 router.route('/')
@@ -34,6 +46,7 @@ router.route('/')
       title: req.body.title,
       author: req.body.author,
       body: req.body.body,
+      urlTitle: encodeURIComponent(req.body.title)
     });
     res.redirect('/articles');
   })

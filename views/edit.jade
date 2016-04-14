@@ -1,0 +1,16 @@
+doctype
+html
+  head
+    title #{title}
+    //- link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    h1
+      |New SHIT!
+    form(action=path id='formShit' method='post' enctype='application/x-www-form-urlencoded')
+      input(type='hidden' name='_method' value='PUT')
+      each val, key in editItem
+        label=key+':'
+        br
+        input(type='text' name=key value=val)
+        br
+      input(type='submit' value='Submit')

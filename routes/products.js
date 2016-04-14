@@ -10,7 +10,17 @@ var products = databaseHelper.model('product', {
 });
 
 router.get('/:id/edit', function(req, res) {
+  var product = products.getById(req.params.id);
+  var productCopy = {
+    name: product.name,
+    price: product.price,
+    inventory: product.inventory
+  };
 
+  res.render('edit', {
+    editItem: productCopy,
+    path: '/products/'+req.params.id
+  });
 });
 
 router.get('/new', function(req, res) {
@@ -23,8 +33,7 @@ router.get('/new', function(req, res) {
 router.route('/:id')
   .put(function(req, res) {
     products.editById(req.params.id, req.body);
-    res.json({success : true});
-
+    res.redirect('/products');
   })
   .delete(function(req, res) {
     products.deleteById(req.params.id);
