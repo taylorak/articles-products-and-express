@@ -1,0 +1,17 @@
+doctype
+html
+  head
+    title #{title}
+    //- link(rel='stylesheet', href='/stylesheets/styles.css')
+  body
+    h1 BLAH BLAH
+    div
+      |#{header}
+      ul
+        each val in list
+         li
+          each value, key in val
+            p=key+':'+' '+value
+
+
+

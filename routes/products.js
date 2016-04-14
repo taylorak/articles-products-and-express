@@ -14,7 +14,10 @@ router.get('/:id/edit', function(req, res) {
 });
 
 router.get('/new', function(req, res) {
-
+  res.render('new', {
+    redirect: '/products',
+    inputs: [ 'name', 'price', 'inventory']
+  });
 });
 
 router.route('/:id')
@@ -29,18 +32,17 @@ router.route('/:id')
 
 router.route('/')
   .post(function(req, res) {
+    console.log('poopie', req.body.name);
     products.add({
       id: products.all().length,
       name: req.body.name,
       price: req.body.price,
       inventory: req.body.inventory,
     });
-    res.json({success : true});
+    res.redirect('/products');
   })
   .get(function(req, res) {
-    console.log(products.all());
-    res.json({success : true});
-
+    res.render('index', { header: 'Products', list: products.all()});
   });
 
 
