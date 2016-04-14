@@ -20,6 +20,8 @@ router.get('/new', function(req, res) {
 router.route('/:id')
   .put(function(req, res) {
     console.log(products.getById(req.params.id));
+    res.json({success : true});
+
   })
   .delete(function(req, res) {
 

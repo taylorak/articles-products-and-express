@@ -39,15 +39,16 @@ function databaseHelper() {
     function _shallowClone(obj) {
       var clone = {};
       var keys = Object.keys(_schema);
-      Object.keys(keys).forEach(function(key) {
+      keys.forEach(function(key) {
         clone[key] = obj[key];
       });
+      return clone;
     }
 
     function _all() {
       return Object.keys(_db).reduce(function(prev, curr) {
         if(_db[curr].model === name) {
-          prev.push(_db[curr]);
+          prev.push(_shallowClone(_db[curr]));
         }
         return prev;
       }, []);
@@ -62,7 +63,6 @@ function databaseHelper() {
 
     function _getById(id) {
       var elements = _all();
-      console.log("poop", elements);
       for(var i = 0; i < elements.length; i++) {
         if(elements[i][_id].toString() === id) {
           return elements[i];
