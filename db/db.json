@@ -5,5 +5,12 @@
     "price": "5",
     "inventory": "5",
     "model" : "product"
+  },
+  "2" : {
+    "id" : 1,
+    "name": "test2",
+    "price": "10",
+    "inventory": "10",
+    "model" : "product"
   }
 }

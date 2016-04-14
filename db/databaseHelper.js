@@ -36,19 +36,19 @@ function databaseHelper() {
 
     _schema = schema;
 
-    function _shallowClone(obj) {
-      var clone = {};
-      var keys = Object.keys(_schema);
-      keys.forEach(function(key) {
-        clone[key] = obj[key];
-      });
-      return clone;
-    }
+    // function _shallowClone(obj) {
+    //   var clone = {};
+    //   var keys = Object.keys(_schema);
+    //   keys.forEach(function(key) {
+    //     clone[key] = obj[key];
+    //   });
+    //   return clone;
+    // }
 
     function _all() {
       return Object.keys(_db).reduce(function(prev, curr) {
         if(_db[curr].model === name) {
-          prev.push(_shallowClone(_db[curr]));
+          prev.push(_db[curr]);
         }
         return prev;
       }, []);
@@ -58,28 +58,47 @@ function databaseHelper() {
       var hash = crypto.createHash('sha1').update(new Date().toString()).digest('hex');
       obj.model = name;
       _db[hash] = obj;
-      console.log(_db);
+      return true;
     }
 
     function _getById(id) {
       var elements = _all();
       for(var i = 0; i < elements.length; i++) {
         if(elements[i][_id].toString() === id) {
-          return _shallowClone(elements[i]);
+          return elements[i];
         }
       }
     }
 
-    function _editById(id) {
+    function _editById(id, obj) {
 
+      var element = _getById(id);
+
+      Object.keys(obj).forEach(function(key) {
+        if(element.hasOwnProperty(key)) {
+          element[key] = obj[key];
+        }
+      });
+
+      return true;
+    }
+
+    function _deleteById(id) {
+      Object.keys(_db).forEach(function(key) {
+        if(_db[key].id.toString() === id) {
+          delete _db[key];
+          return true;
+        }
+      });
+      return false;
     }
 
     return {
       all : _all,
       add : _add,
       getById : _getById,
-      editById: _editById
-      //editByTitle : _editByTitle
+      editById: _editById,
+      deleteById: _deleteById
     };
 
   }
