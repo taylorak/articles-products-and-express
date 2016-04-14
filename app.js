@@ -11,6 +11,9 @@ app.set('views', './views');
 
 app.use(bodyParser.urlencoded({ extended : true }));
 
+var databaseHelper = require('./db/databaseHelper');
+databaseHelper.connect('./db/db.json');
+
 app.get('/', function(req, res) {
   res.json({success : true});
 });

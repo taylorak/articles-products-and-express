@@ -1,0 +1,9 @@
+{
+  "1" : {
+    "id" : 0,
+    "name": "test",
+    "price": "5",
+    "inventory": "5",
+    "model" : "product"
+  }
+}
