@@ -17,6 +17,7 @@
     "title": "article",
     "author": "TayTay",
     "body": "Taylor hates Koalas!",
+    "urlTitle": "article",
     "model" : "article"
   }
 }

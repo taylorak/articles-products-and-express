@@ -63,6 +63,7 @@ function databaseHelper() {
 
     function _getById(id) {
       var elements = _all();
+      console.log('here', elements);
       for(var i = 0; i < elements.length; i++) {
         if(elements[i][_id].toString() === id) {
           return elements[i];
@@ -73,7 +74,9 @@ function databaseHelper() {
     function _editById(id, obj) {
 
       var element = _getById(id);
-      console.log('poop',obj);
+      // console.log('poop',obj);
+      // console.log('element', element);
+      // console.log('id', id);
       Object.keys(obj).forEach(function(key) {
         if(element.hasOwnProperty(key)) {
           console.log('here');

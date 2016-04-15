@@ -12,9 +12,9 @@ var articles = databaseHelper.model('article', {
 router.get('/:title/edit', function(req, res) {
   var article = articles.getById(req.params.title);
   var articlesCopy = {
-    title: articles.title,
-    body: articles.body,
-    author: articles.author
+    title: article.title,
+    body: article.body,
+    author: article.author
   };
 
   res.render('edit', {
@@ -32,6 +32,10 @@ router.get('/new', function(req, res) {
 
 router.route('/:title')
   .put(function(req, res) {
+    if('title' in req.body){
+      req.body.urlTitle = encodeURIComponent(req.body.title);
+    }
+    console.log('dude', req.params.title);
     articles.editById(req.params.title, req.body);
     res.redirect('/articles');
   })
@@ -51,7 +55,17 @@ router.route('/')
     res.redirect('/articles');
   })
   .get(function(req, res) {
-    res.render('index', { header: 'Articles', list: articles.all() });
+    var allArticles = articles.all();
+    var articleCopies = allArticles.reduce(function (previous, current) {
+      var articleCopy= {};
+      articleCopy.title= current.title;
+      articleCopy.author = current.author;
+      articleCopy.body = current.body;
+      previous.push(articleCopy);
+      return previous;
+    }, []);
+
+    res.render('index', { header: 'Articles', list: articleCopies});
   });
 
 
