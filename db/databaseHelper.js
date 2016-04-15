@@ -89,7 +89,9 @@ function databaseHelper() {
 
     function _deleteById(id) {
       Object.keys(_db).forEach(function(key) {
-        if(_db[key].id.toString() === id) {
+        console.log('dbkey', _db[key]);
+        console.log('id', _id);
+        if(_db[key][_id].toString() === id) {
           delete _db[key];
           return true;
         }
