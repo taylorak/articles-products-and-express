@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var validateBody = require('../lib/validateBody');
+var checkHeaders = require('../lib/checkArticleHeaders');
 
 var databaseHelper = require('../db/databaseHelper');
 var articles = databaseHelper.model('article', {
@@ -10,6 +11,8 @@ var articles = databaseHelper.model('article', {
   author: { type: 'string'},
   urlTitle: { type: 'string'}
 });
+
+// router.use(checkHeaders);
 
 router.get('/:title/edit', function(req, res) {
   articles.getById(req.params.title, function(err, article) {
@@ -60,7 +63,6 @@ router.route('/')
     });
   })
   .get(function(req, res) {
-    //var allArticles = articles.all();
 
     articles.all(function(err, elements) {
       var articleCopies = elements.reduce(function (previous, current) {
