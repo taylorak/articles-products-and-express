@@ -51,7 +51,11 @@ router.route('/:title')
   })
   .delete(function(req, res) {
     articles.deleteById(req.params.title, function(err) {
-      res.json({success: true});
+      if(err) {
+        res.status(500).render('error/500');
+      } else {
+        res.json({success: true});
+      }
     });
   });
 

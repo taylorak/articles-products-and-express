@@ -45,7 +45,11 @@ router.route('/:id')
   })
   .delete(function(req, res) {
     products.deleteById(req.params.id, function(err) {
-      res.json({success : true});
+      if(err) {
+        res.status(500).render('error/500');
+      } else {
+        res.json({success : true});
+      }
     });
   });
 
