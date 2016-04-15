@@ -89,12 +89,11 @@ function databaseHelper() {
 
     function _deleteById(id) {
       Object.keys(_db).forEach(function(key) {
-        console.log('dbkey', _db[key]);
-        console.log('id', _id);
-        if(_db[key][_id].toString() === id) {
-          delete _db[key];
-          return true;
-        }
+        if(_db[key].model === name &&
+         _db[key][_id].toString() === id) {
+            delete _db[key];
+            return true;
+          }
       });
       return false;
     }

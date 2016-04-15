@@ -52,6 +52,15 @@ router.route('/')
     res.redirect('/products');
   })
   .get(function(req, res) {
+    // var allProducts = products.all();
+    // var productCopies = allProducts.reduce(function (previous, current) {
+    //   var productCopy= {};
+    //   productCopy.name= current.name;
+    //   productCopy.price = current.price;
+    //   productCopy.inventory = current.inventory;
+    //   previous.push(productCopy);
+    //   return previous;
+    // }, []);
     res.render('index', { header: 'Products', list: products.all()});
   });
 
