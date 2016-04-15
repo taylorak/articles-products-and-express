@@ -4,8 +4,10 @@ var crypto = require('crypto');
 function databaseHelper() {
 
   var _db = {};
+  var _file;
 
   function _connect(file) {
+    _file = file;
     fs.stat(file, function(err, stats) {
       if(err) {
         if(err.code === 'ENOENT') {
@@ -45,10 +47,8 @@ function databaseHelper() {
     //   return clone;
     // }
     function _length() {
-      console.log("LENGTH");
       var elements = Object.keys(_db).filter(function(key) {
         if(_db[key].model === name) {
-          console.log('IF STATEMENT');
           return true;
         }
         return false;
@@ -70,7 +70,13 @@ function databaseHelper() {
       var hash = crypto.createHash('sha1').update(new Date().toString()).digest('hex');
       obj.model = name;
       _db[hash] = obj;
-      cb(null);
+
+      fs.writeFile(_file, JSON.stringify(_db), function(err) {
+        if(err) {
+          cb(err);
+        }
+        cb(null);
+      });
     }
 
     function _getById(id, cb) {
@@ -90,7 +96,13 @@ function databaseHelper() {
             element[key] = obj[key];
           }
         });
-        cb(null);
+
+        fs.writeFile(_file, JSON.stringify(_db), function(err) {
+          if(err) {
+            cb(err);
+          }
+          cb(null);
+        });
       });
     }
 
@@ -100,10 +112,25 @@ function databaseHelper() {
         if(_db[key].model === name &&
          _db[key][_id].toString() === id) {
             delete _db[key];
-            cb(null);
+            fs.writeFile(_file, JSON.stringify(_db), function(err) {
+              if(err) {
+                cb(err);
+              }
+              cb(null);
+            });
           }
       });
       cb(new Error());
+    }
+
+    function _clear(cb) {
+      _db = {};
+      fs.writeFile(_file, JSON.stringify(_db), function(err) {
+        if(err) {
+          cb(err);
+        }
+        cb(null);
+      });
     }
 
     return {
