@@ -2,14 +2,14 @@ doctype
 html
   head
     title #{title}
-    //- link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel="stylesheet" href="/css/styles.css")
   body
-    h1
-      |New SHIT!
-    form(action=redirect id='formShit' method='post')
+    h1.
+      New SHIT!
+    form(action=redirect id="formShit" method="post")
       each val in inputs
-        label=val+':'
+        label=val+":"
         br
-        input(type='text' name=val)
+        input(type="text" name=val)
         br
-      input(type='submit' value='Submit')
+      input(type="submit" value="Submit")

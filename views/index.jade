@@ -2,7 +2,7 @@ doctype
 html
   head
     title #{title}
-    //- link(rel='stylesheet', href='/stylesheets/styles.css')
+    link(rel="stylesheet" href="/css/styles.css")
   body
     h1 BLAH BLAH
     div= header
@@ -10,7 +10,7 @@ html
         each val in list
          li
           each value, key in val
-            p=key+':'+' '+value
+            p=key+":"+" "+value
 
 
 

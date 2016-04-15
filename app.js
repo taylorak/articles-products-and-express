@@ -4,8 +4,8 @@ var methodOverride = require('method-override');
 
 var productRoute = require('./routes/products');
 var articlesRoute = require('./routes/articles');
-var logger = require('./lib/logger');
-var allowTracking = require('./lib/allowTracking');
+var logger = require('./lib/middleware/logger');
+var allowTracking = require('./lib/middleware/allowTracking');
 
 var app = express();
 
@@ -26,15 +26,15 @@ app.use(methodOverride(function(req, res){
 app.use(allowTracking);
 app.use(logger);
 
-var databaseHelper = require('./db/databaseHelper');
+var databaseHelper = require('./lib/databaseHelper');
 databaseHelper.connect('./db/db.json');
-
-app.get('/', function(req, res) {
-  res.render('index', {title: "Products and Articles"});
-});
 
 app.use('/products', productRoute);
 app.use('/articles', articlesRoute);
+
+app.use(function(req, res) {
+  res.status(404).render('error/404');
+});
 
 if(!module.parent) {
   app.listen(3000);

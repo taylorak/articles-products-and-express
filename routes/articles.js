@@ -1,10 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
-var validateBody = require('../lib/validateBody');
-var checkHeaders = require('../lib/checkArticleHeaders');
+var validateBody = require('../lib/middleware/validateBody');
+var checkHeaders = require('../lib/middleware/checkArticleHeaders');
 
-var databaseHelper = require('../db/databaseHelper');
+var databaseHelper = require('../lib/databaseHelper');
 var articles = databaseHelper.model('article', {
   title: { type: 'string', id: true},
   body: { type: 'string'},
@@ -42,7 +42,11 @@ router.route('/:title')
       req.body.urlTitle = encodeURIComponent(req.body.title);
     }
     articles.editById(req.params.title, req.body, function(err, element) {
-      res.redirect('/articles');
+      if(err) {
+        res.status(500).render('error/500');
+      } else {
+        res.redirect('/articles');
+      }
     });
   })
   .delete(function(req, res) {
@@ -59,7 +63,11 @@ router.route('/')
       body: req.body.body,
       urlTitle: encodeURIComponent(req.body.title)
     }, function(err) {
-      res.redirect('/articles');
+      if(err) {
+        res.status(500).render('error/500');
+      } else {
+        res.redirect('/articles');
+      }
     });
   })
   .get(function(req, res) {
