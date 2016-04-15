@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
+var validateBody = require('../lib/validateBody');
 var databaseHelper = require('../db/databaseHelper');
 var products = databaseHelper.model('product', {
   id: { type: "number", id: true },
@@ -31,7 +32,7 @@ router.get('/new', function(req, res) {
 });
 
 router.route('/:id')
-  .put(function(req, res) {
+  .put(validateBody({'name' : 'string', 'price': 'string', 'inventory': 'string'}), function(req, res) {
     products.editById(req.params.id, req.body);
     res.redirect('/products');
   })
@@ -41,7 +42,7 @@ router.route('/:id')
   });
 
 router.route('/')
-  .post(function(req, res) {
+  .post(validateBody({'name' : 'string', 'price': 'string', 'inventory': 'string'}),function(req, res) {
     console.log('poopie', req.body.name);
     products.add({
       id: products.all().length,

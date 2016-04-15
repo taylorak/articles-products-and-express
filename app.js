@@ -1,6 +1,5 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var jade = require('jade');
 var methodOverride = require('method-override');
 
 var productRoute = require('./routes/products');

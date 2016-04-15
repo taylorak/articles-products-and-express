@@ -1,7 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var databaseHelper = require('../db/databaseHelper');
 
+var validateBody = require('../lib/validateBody');
+
+var databaseHelper = require('../db/databaseHelper');
 var articles = databaseHelper.model('article', {
   title: { type: 'string', id: true},
   body: { type: 'string'},
@@ -31,11 +33,10 @@ router.get('/new', function(req, res) {
 });
 
 router.route('/:title')
-  .put(function(req, res) {
+  .put(validateBody({'title': 'string', 'author': 'string', 'body': 'string'}), function(req, res) {
     if('title' in req.body){
       req.body.urlTitle = encodeURIComponent(req.body.title);
     }
-    console.log('dude', req.params.title);
     articles.editById(req.params.title, req.body);
     res.redirect('/articles');
   })
@@ -45,7 +46,7 @@ router.route('/:title')
   });
 
 router.route('/')
- .post(function(req, res) {
+ .post(validateBody({'title' : 'string', 'author': 'string', 'body' : 'string'}), function(req, res) {
     articles.add({
       title: req.body.title,
       author: req.body.author,
