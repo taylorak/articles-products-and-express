@@ -70,7 +70,7 @@ router.route('/')
   })
   .get(function(req, res) {
     products.all(function(err, elements) {
-      res.render('index', { header: 'Products', list: elements});
+      res.render('index', { title: 'Products', list: elements});
     });
   });
 

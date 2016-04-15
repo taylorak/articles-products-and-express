@@ -77,16 +77,7 @@ router.route('/')
   .get(function(req, res) {
 
     articles.all(function(err, elements) {
-      var articleCopies = elements.reduce(function (previous, current) {
-        var articleCopy= {};
-        articleCopy.title= current.title;
-        articleCopy.author = current.author;
-        articleCopy.body = current.body;
-        previous.push(articleCopy);
-        return previous;
-      }, []);
-
-      res.render('index', { header: 'Articles', list: articleCopies});
+      res.render('index', { title: 'Articles', list: elements});
     });
 
 

@@ -4,13 +4,26 @@ html
     title #{title}
     link(rel="stylesheet" href="/css/styles.css")
   body
-    h1 BLAH BLAH
-    div= header
-      ul
-        each val in list
+    h1 #{title}
+    ul(id="list")
+      each val in list
+        if title == "Products"
          li
-          each value, key in val
-            p=key+":"+" "+value
-
-
-
+            div(id="info")
+              p Name: #{val.name}
+              p Price: #{val.price}
+              p Inventory: #{val.inventory}
+            div(id="edit")
+              a(id="editButton" href="/products/#{val.id}/edit") Edit
+            div(id="delete")
+              a(id="deleteButton" href="/products/#{val.id}") Delete
+        else if title == "Articles"
+         li
+            div(id="info")
+              p Title: #{val.title}
+              p Author: #{val.author}
+              p Body: #{val.body}
+            div(id="edit")
+              a(id="editButton" href="/articles/#{val.urlTitle}/edit") Edit
+            div(id="delete")
+              a(id="deleteButton" href="/articles/#{val.urlTitle}") Delete
