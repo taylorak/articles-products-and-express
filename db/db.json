@@ -12,5 +12,12 @@
     "price": "10",
     "inventory": "10",
     "model" : "product"
+  },
+  "3" : {
+    "title": "article",
+    "author": "TayTay",
+    "body": "Taylor hates Koalas!",
+    "urlTitle": "article",
+    "model" : "article"
   }
 }

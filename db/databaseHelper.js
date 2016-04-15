@@ -63,6 +63,7 @@ function databaseHelper() {
 
     function _getById(id) {
       var elements = _all();
+      console.log('here', elements);
       for(var i = 0; i < elements.length; i++) {
         if(elements[i][_id].toString() === id) {
           return elements[i];
@@ -73,19 +74,24 @@ function databaseHelper() {
     function _editById(id, obj) {
 
       var element = _getById(id);
-
+      // console.log('poop',obj);
+      // console.log('element', element);
+      // console.log('id', id);
       Object.keys(obj).forEach(function(key) {
         if(element.hasOwnProperty(key)) {
+          console.log('here');
           element[key] = obj[key];
         }
       });
-
+      console.log(_db);
       return true;
     }
 
     function _deleteById(id) {
       Object.keys(_db).forEach(function(key) {
-        if(_db[key].id.toString() === id) {
+        console.log('dbkey', _db[key]);
+        console.log('id', _id);
+        if(_db[key][_id].toString() === id) {
           delete _db[key];
           return true;
         }

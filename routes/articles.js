@@ -10,7 +10,17 @@ var articles = databaseHelper.model('article', {
 });
 
 router.get('/:title/edit', function(req, res) {
+  var article = articles.getById(req.params.title);
+  var articlesCopy = {
+    title: article.title,
+    body: article.body,
+    author: article.author
+  };
 
+  res.render('edit', {
+    editItem: articlesCopy,
+    path: '/articles/'+req.params.title
+  });
 });
 
 router.get('/new', function(req, res) {
@@ -22,10 +32,16 @@ router.get('/new', function(req, res) {
 
 router.route('/:title')
   .put(function(req, res) {
-
+    if('title' in req.body){
+      req.body.urlTitle = encodeURIComponent(req.body.title);
+    }
+    console.log('dude', req.params.title);
+    articles.editById(req.params.title, req.body);
+    res.redirect('/articles');
   })
   .delete(function(req, res) {
-
+    articles.deleteById(req.params.title);
+    res.json({success: true});
   });
 
 router.route('/')
@@ -34,11 +50,22 @@ router.route('/')
       title: req.body.title,
       author: req.body.author,
       body: req.body.body,
+      urlTitle: encodeURIComponent(req.body.title)
     });
     res.redirect('/articles');
   })
   .get(function(req, res) {
-    res.render('index', { header: 'Articles', list: articles.all() });
+    var allArticles = articles.all();
+    var articleCopies = allArticles.reduce(function (previous, current) {
+      var articleCopy= {};
+      articleCopy.title= current.title;
+      articleCopy.author = current.author;
+      articleCopy.body = current.body;
+      previous.push(articleCopy);
+      return previous;
+    }, []);
+
+    res.render('index', { header: 'Articles', list: articleCopies});
   });
 
 
