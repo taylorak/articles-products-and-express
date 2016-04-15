@@ -12,16 +12,17 @@ var articles = databaseHelper.model('article', {
 });
 
 router.get('/:title/edit', function(req, res) {
-  var article = articles.getById(req.params.title);
-  var articlesCopy = {
-    title: article.title,
-    body: article.body,
-    author: article.author
-  };
+  articles.getById(req.params.title, function(err, article) {
+    var articlesCopy = {
+      title: article.title,
+      body: article.body,
+      author: article.author
+    };
 
-  res.render('edit', {
-    editItem: articlesCopy,
-    path: '/articles/'+req.params.title
+    res.render('edit', {
+      editItem: articlesCopy,
+      path: '/articles/'+req.params.title
+    });
   });
 });
 
@@ -37,12 +38,14 @@ router.route('/:title')
     if('title' in req.body){
       req.body.urlTitle = encodeURIComponent(req.body.title);
     }
-    articles.editById(req.params.title, req.body);
-    res.redirect('/articles');
+    articles.editById(req.params.title, req.body, function(err, element) {
+      res.redirect('/articles');
+    });
   })
   .delete(function(req, res) {
-    articles.deleteById(req.params.title);
-    res.json({success: true});
+    articles.deleteById(req.params.title, function(err) {
+      res.json({success: true});
+    });
   });
 
 router.route('/')
@@ -52,21 +55,27 @@ router.route('/')
       author: req.body.author,
       body: req.body.body,
       urlTitle: encodeURIComponent(req.body.title)
+    }, function(err) {
+      res.redirect('/articles');
     });
-    res.redirect('/articles');
   })
   .get(function(req, res) {
-    var allArticles = articles.all();
-    var articleCopies = allArticles.reduce(function (previous, current) {
-      var articleCopy= {};
-      articleCopy.title= current.title;
-      articleCopy.author = current.author;
-      articleCopy.body = current.body;
-      previous.push(articleCopy);
-      return previous;
-    }, []);
+    //var allArticles = articles.all();
 
-    res.render('index', { header: 'Articles', list: articleCopies});
+    articles.all(function(err, elements) {
+      var articleCopies = elements.reduce(function (previous, current) {
+        var articleCopy= {};
+        articleCopy.title= current.title;
+        articleCopy.author = current.author;
+        articleCopy.body = current.body;
+        previous.push(articleCopy);
+        return previous;
+      }, []);
+
+      res.render('index', { header: 'Articles', list: articleCopies});
+    });
+
+
   });
 
 

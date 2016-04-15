@@ -11,17 +11,19 @@ var products = databaseHelper.model('product', {
 });
 
 router.get('/:id/edit', function(req, res) {
-  var product = products.getById(req.params.id);
-  var productCopy = {
-    name: product.name,
-    price: product.price,
-    inventory: product.inventory
-  };
+  products.getById(req.params.id, function(err, product) {
+    var productCopy = {
+      name: product.name,
+      price: product.price,
+      inventory: product.inventory
+    };
 
-  res.render('edit', {
-    editItem: productCopy,
-    path: '/products/'+req.params.id
+    res.render('edit', {
+      editItem: productCopy,
+      path: '/products/'+req.params.id
+    });
   });
+
 });
 
 router.get('/new', function(req, res) {
@@ -33,36 +35,31 @@ router.get('/new', function(req, res) {
 
 router.route('/:id')
   .put(validateBody({'name' : 'string', 'price': 'string', 'inventory': 'string'}), function(req, res) {
-    products.editById(req.params.id, req.body);
-    res.redirect('/products');
+    products.editById(req.params.id, req.body, function(err) {
+      res.redirect('/products');
+    });
   })
   .delete(function(req, res) {
-    products.deleteById(req.params.id);
-    res.json({success : true});
+    products.deleteById(req.params.id, function(err) {
+      res.json({success : true});
+    });
   });
 
 router.route('/')
   .post(validateBody({'name' : 'string', 'price': 'string', 'inventory': 'string'}),function(req, res) {
-    console.log('poopie', req.body.name);
     products.add({
-      id: products.all().length,
+      id: products.length(),
       name: req.body.name,
       price: req.body.price,
       inventory: req.body.inventory,
+    }, function(err) {
+      res.redirect('/products');
     });
-    res.redirect('/products');
   })
   .get(function(req, res) {
-    // var allProducts = products.all();
-    // var productCopies = allProducts.reduce(function (previous, current) {
-    //   var productCopy= {};
-    //   productCopy.name= current.name;
-    //   productCopy.price = current.price;
-    //   productCopy.inventory = current.inventory;
-    //   previous.push(productCopy);
-    //   return previous;
-    // }, []);
-    res.render('index', { header: 'Products', list: products.all()});
+    products.all(function(err, elements) {
+      res.render('index', { header: 'Products', list: elements});
+    });
   });
 
 

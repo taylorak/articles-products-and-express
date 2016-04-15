@@ -44,58 +44,66 @@ function databaseHelper() {
     //   });
     //   return clone;
     // }
+    function _length() {
+      console.log("LENGTH");
+      var elements = Object.keys(_db).filter(function(key) {
+        if(_db[key].model === name) {
+          console.log('IF STATEMENT');
+          return true;
+        }
+        return false;
+      });
+      return elements.length;
+    }
 
-    function _all() {
-      return Object.keys(_db).reduce(function(prev, curr) {
+    function _all(cb) {
+      var allData =  Object.keys(_db).reduce(function(prev, curr) {
         if(_db[curr].model === name) {
           prev.push(_db[curr]);
         }
         return prev;
       }, []);
+      cb(null, allData);
     }
 
-    function _add(obj) {
+    function _add(obj, cb) {
       var hash = crypto.createHash('sha1').update(new Date().toString()).digest('hex');
       obj.model = name;
       _db[hash] = obj;
-      return true;
+      cb(null);
     }
 
-    function _getById(id) {
-      var elements = _all();
-      console.log('here', elements);
-      for(var i = 0; i < elements.length; i++) {
-        if(elements[i][_id].toString() === id) {
-          return elements[i];
-        }
-      }
-    }
-
-    function _editById(id, obj) {
-
-      var element = _getById(id);
-      // console.log('poop',obj);
-      // console.log('element', element);
-      // console.log('id', id);
-      Object.keys(obj).forEach(function(key) {
-        if(element.hasOwnProperty(key)) {
-          console.log('here');
-          element[key] = obj[key];
+    function _getById(id, cb) {
+      _all(function(err, elements) {
+        for(var i = 0; i < elements.length; i++) {
+          if(elements[i][_id].toString() === id) {
+            cb(null, elements[i]);
+          }
         }
       });
-      console.log(_db);
-      return true;
     }
 
-    function _deleteById(id) {
+    function _editById(id, obj, cb) {
+      _getById(id, function(err, element) {
+        Object.keys(obj).forEach(function(key) {
+          if(element.hasOwnProperty(key)) {
+            element[key] = obj[key];
+          }
+        });
+        cb(null);
+      });
+    }
+
+    function _deleteById(id, cb) {
+
       Object.keys(_db).forEach(function(key) {
         if(_db[key].model === name &&
          _db[key][_id].toString() === id) {
             delete _db[key];
-            return true;
+            cb(null);
           }
       });
-      return false;
+      cb(new Error());
     }
 
     return {
@@ -103,7 +111,8 @@ function databaseHelper() {
       add : _add,
       getById : _getById,
       editById: _editById,
-      deleteById: _deleteById
+      deleteById: _deleteById,
+      length: _length
     };
 
   }
