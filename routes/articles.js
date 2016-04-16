@@ -77,7 +77,7 @@ router.route('/')
   .get(function(req, res) {
 
     articles.all(function(err, elements) {
-      res.render('index', { title: 'Articles', list: elements});
+      res.render('articleIndex', { title: 'Articles', list: elements});
     });
 
 
