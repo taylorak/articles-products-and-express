@@ -1,0 +1,23 @@
+doctype
+html
+  head
+    title #{title}
+    link(rel="stylesheet" href="/css/styles.css")
+  body
+    h1 #{title}
+      a(href="/products/new")
+        button New
+    ul(id="list")
+      each val in list
+       li
+          div(class="info")
+            p Name: #{val.name}
+            p Price: #{val.price}
+            p Inventory: #{val.inventory}
+          div(class="edit")
+            a(class="editButton" href="/products/#{val.id}/edit")
+              button Edit
+          div(class="delete")
+            a(class="deleteButton" href="/products/#{val.id}")
+              button Delete
+    script(type="text/javascript" src="/js/buttonEvents.js")

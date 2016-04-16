@@ -46,7 +46,7 @@ router.route('/:id')
   .delete(function(req, res) {
     products.deleteById(req.params.id, function(err) {
       if(err) {
-        res.status(500).render('error/500');
+        res.json({success : false});
       } else {
         res.json({success : true});
       }
@@ -70,7 +70,7 @@ router.route('/')
   })
   .get(function(req, res) {
     products.all(function(err, elements) {
-      res.render('index', { header: 'Products', list: elements});
+      res.render('productIndex', { title: 'Products', list: elements});
     });
   });
 
