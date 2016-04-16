@@ -1,9 +1,18 @@
 body{
   background-image:
-    url("/images/girlLaptop.jpg");
+    url("/images/whiteTopLaptop.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  background-color: transparent;
-  color: #ede9ce;
+  color: #f4f0d2;
+  display: flex;
 }
+
+#content{
+  margin:10%;
+  width: 80%;
+  background: rgba(88, 126, 114, 0.78);
+  border-radius: 5px;
+  font-family: 'Open Sans', sans-serif;
+}
+

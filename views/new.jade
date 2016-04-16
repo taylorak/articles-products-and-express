@@ -2,16 +2,18 @@ doctype
 html
   head
     title #{title}
+    link(href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic,800,300italic,300' rel='stylesheet' type='text/css')
     link(rel="stylesheet" href="/css/styles.css")
   body
-    h1 New #{title}
-    form(action=redirect id="newForm" method="post")
-      each val in inputs
-        div(id=val)
-          label=val+":"
-          br
-          input(type="text" name="#{val}" class="inputs")
-          br
-      input(type="submit" value="Submit")
+    div(id="content")
+      h1 New #{title}
+        form(action=redirect id="newForm" method="post")
+          each val in inputs
+            div(id=val)
+              label=val+":"
+              br
+              input(type="text" name="#{val}" class="inputs")
+              br
+          input(type="submit" value="Submit")
     script(type='text/javascript' src="/js/displayFormSuccess.js")
     script(type='text/javascript' src="/js/submitForm.js")
