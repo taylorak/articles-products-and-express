@@ -23,14 +23,16 @@ router.get('/:title/edit', function(req, res) {
     };
 
     res.render('edit', {
+      title: article.title,
       editItem: articlesCopy,
-      path: '/articles/'+req.params.title
+      redirect: '/articles/'+req.params.title
     });
   });
 });
 
 router.get('/new', function(req, res) {
   res.render('new', {
+    title: "Articles",
     redirect: '/articles',
     inputs: ['title', 'author', 'body']
    });
@@ -43,9 +45,9 @@ router.route('/:title')
     }
     articles.editById(req.params.title, req.body, function(err, element) {
       if(err) {
-        res.status(500).render('error/500');
+        res.json({ success: false, errors: {}});
       } else {
-        res.redirect('/articles');
+        res.json({ success: true, redirect : '/articles'});
       }
     });
   })
@@ -68,14 +70,13 @@ router.route('/')
       urlTitle: encodeURIComponent(req.body.title)
     }, function(err) {
       if(err) {
-        res.status(500).render('error/500');
+        res.json({ success: false, errors: {}});
       } else {
-        res.redirect('/articles');
+        res.json({ success: true, redirect : '/articles'});
       }
     });
   })
   .get(function(req, res) {
-
     articles.all(function(err, elements) {
       res.render('articleIndex', { title: 'Articles', list: elements});
     });

@@ -19,8 +19,9 @@ router.get('/:id/edit', function(req, res) {
     };
 
     res.render('edit', {
+      title: product.name,
       editItem: productCopy,
-      path: '/products/'+req.params.id
+      redirect: '/products/'+req.params.id
     });
   });
 
@@ -28,6 +29,7 @@ router.get('/:id/edit', function(req, res) {
 
 router.get('/new', function(req, res) {
   res.render('new', {
+    title: "Products",
     redirect: '/products',
     inputs: [ 'name', 'price', 'inventory']
   });
@@ -37,9 +39,9 @@ router.route('/:id')
   .put(validateBody({'name' : 'string', 'price': 'number', 'inventory': 'number'}), function(req, res) {
     products.editById(req.params.id, req.body, function(err) {
       if(err) {
-        res.status(500).render('error/500');
+        res.json({ success: false, errors: {}});
       } else {
-        res.redirect('/products');
+        res.json({ success: true, redirect : '/products'});
       }
     });
   })
@@ -62,9 +64,9 @@ router.route('/')
       inventory: req.body.inventory,
     }, function(err) {
       if(err) {
-        res.status(500).render('error/500');
+        res.json({ success: false, errors: {}});
       } else {
-        res.redirect('/products');
+        res.json({ success: true, redirect : '/products'});
       }
     });
   })
