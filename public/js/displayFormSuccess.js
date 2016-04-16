@@ -12,7 +12,6 @@ function displayFormSuccess(event) {
   }
 
   if(response.success) {
-    console.log("SUCCESS", response.redirect);
     window.location.href = response.redirect;
   } else {
     var errors = response.errors;
