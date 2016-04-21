@@ -61,7 +61,11 @@ router.route('/')
   .get(function(req, res) {
     req.conn.query('SELECT * FROM products ORDER BY id ASC')
     .then(function(products) {
+      console.log('GET');
       res.render('productIndex', { title: 'Products', list: products});
+    })
+    .catch(function(err) {
+      res.render('error/500');
     });
   });
 

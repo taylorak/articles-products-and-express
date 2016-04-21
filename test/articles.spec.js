@@ -1,4 +1,5 @@
-var supertest = require('supertest');
+var request = require('supertest');
+var app = require('../app');
 
 describe('articles routes', function() {
 
