@@ -4,14 +4,6 @@ var router = express.Router();
 var validateBody = require('../lib/middleware/validateBody');
 var checkHeaders = require('../lib/middleware/checkArticleHeaders');
 
-var databaseHelper = require('../lib/databaseHelper');
-var articles = databaseHelper.model('article', {
-  title: { type: 'string', id: true},
-  body: { type: 'string'},
-  author: { type: 'string'},
-  urlTitle: { type: 'string'}
-});
-
 // router.use(checkHeaders);
 
 router.get('/:title/edit', function(req, res) {

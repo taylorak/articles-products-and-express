@@ -1,6 +1,16 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
+var pgp = require('pg-promise')()
+
+var dbConn = {
+    host: 'localhost',
+    port: 5432,
+    database: 'blog_database',
+    user: 'blogger'
+};
+
+var conn = pgp(dbConn);
 
 var productRoute = require('./routes/products');
 var articlesRoute = require('./routes/articles');
@@ -15,6 +25,11 @@ app.set('views', './views');
 app.use(express.static('./public'));
 app.use(bodyParser.urlencoded({ extended : true }));
 
+app.use(function(req, res, next) {
+  req.conn = conn;
+  next();
+});
+
 app.use(methodOverride(function(req, res){
   if (req.body && typeof req.body === 'object' && '_method' in req.body) {
     var method = req.body._method;
@@ -25,9 +40,6 @@ app.use(methodOverride(function(req, res){
 
 app.use(allowTracking);
 app.use(logger);
-
-var databaseHelper = require('./lib/databaseHelper');
-databaseHelper.connect('./db/db.json');
 
 app.use('/products', productRoute);
 app.use('/articles', articlesRoute);
