@@ -9,5 +9,7 @@ CREATE TABLE articles(
   id SERIAL PRIMARY KEY,
   title varchar(255) NOT NULL,
   author varchar(255) NOT NULL,
-  body TEXT NOT NULL
+  body TEXT NOT NULL,
+  urlTitle varchar(255) NOT NULL
 );
+
