@@ -19,6 +19,7 @@ function displayFormSuccess(event) {
       var errorDiv = document.querySelector('#' + key);
       var errorMessage = document.createElement('p');
       errorMessage.className = "errors";
+      errorMessage.style.color = "#c64110";
       errorMessage.innerHTML = errors[key];
       errorDiv.appendChild(errorMessage);
     });
