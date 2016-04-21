@@ -61,7 +61,7 @@ router.route('/')
     });
   })
   .get(function(req, res) {
-    req.conn.query('SELECT * FROM articles')
+    req.conn.query('SELECT * FROM articles ORDER BY id ASC')
     .then(function (articles) {
       res.render('articleIndex', { title: 'Articles', list: articles});
     });
