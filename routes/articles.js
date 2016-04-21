@@ -32,7 +32,7 @@ router.route('/:title')
     }
     req.conn.query('UPDATE articles SET title = $1, author = $2, body = $3, urltitle = $4 WHERE title = $5', [req.body.title, req.body.author, req.body.body, req.body.urltitle, req.params.title])
     .then(function () {
-      res.json({ success: true, redirect : '/articles'})
+      res.json({ success: true, redirect : '/articles'});
     })
     .catch(function (err) {
       res.json({ success: false, errors: {}});
