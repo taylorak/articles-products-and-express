@@ -8,19 +8,7 @@ var conn = require('../db/db');
 describe('articles routes', function() {
 
   beforeEach(function(done) {
-    conn.query('DROP TABLE IF EXISTS products')
-    .then(function() {
-      return conn.query('DROP TABLE IF EXISTS articles');
-    })
-    .then(function() {
-      return conn.query('CREATE TABLE products(' +
-        'id SERIAL PRIMARY KEY,' +
-        'name varchar(255) NOT NULL,' +
-        'price MONEY NOT NULL,' +
-        'inventory INTEGER NOT NULL' +
-        ')'
-      );
-    })
+    conn.query('DROP TABLE IF EXISTS articles')
     .then(function() {
       return conn.query('CREATE TABLE articles(' +
         'id SERIAL PRIMARY KEY,' +
