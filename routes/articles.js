@@ -7,7 +7,7 @@ var checkHeaders = require('../lib/middleware/checkArticleHeaders');
 // router.use(checkHeaders);
 
 router.get('/:title/edit', function(req, res) {
-  req.conn.query('SELECT title, author, body FROM articles WHERE title = $1', req.params.title)
+  req.articles.getArticle(req.params.title)
     .then(function (article) {
       res.render('edit', {
         title: article[0].title,
@@ -27,10 +27,7 @@ router.get('/new', function(req, res) {
 
 router.route('/:title')
   .put(validateBody({'title': 'string', 'author': 'string', 'body': 'string'}), function(req, res) {
-    if('title' in req.body){
-      req.body.urltitle = encodeURIComponent(req.body.title);
-    }
-    req.conn.query('UPDATE articles SET title = $1, author = $2, body = $3, urltitle = $4 WHERE title = $5', [req.body.title, req.body.author, req.body.body, req.body.urltitle, req.params.title])
+    req.articles.editArticle(req.params.title, req.body)
     .then(function () {
       res.json({ success: true, redirect : '/articles'});
     })
@@ -39,7 +36,7 @@ router.route('/:title')
     });
   })
   .delete(function(req, res) {
-    req.conn.query('DELETE FROM articles WHERE title = $1', req.params.title)
+    req.articles.deleteArticle(req.params.title)
     .then(function () {
       res.json({success: true});
     })
@@ -51,8 +48,7 @@ router.route('/:title')
 
 router.route('/')
   .post(validateBody({'title' : 'string', 'author': 'string', 'body' : 'string'}), function(req, res) {
-    req.conn.query('INSERT INTO articles (title, author, body, urltitle)' +
-      'VALUES ($1, $2, $3, $4)', [req.body.title, req.body.author, req.body.body, encodeURIComponent(req.body.title)])
+    req.articles.addArticle(req.body)
     .then(function () {
       res.json({ success: true, redirect : '/articles'});
     })
@@ -61,9 +57,12 @@ router.route('/')
     });
   })
   .get(function(req, res) {
-    req.conn.query('SELECT * FROM articles ORDER BY id ASC')
+    req.articles.getAll()
     .then(function (articles) {
       res.render('articleIndex', { title: 'Articles', list: articles});
+    })
+    .catch(function(err) {
+      res.render('error/500');
     });
 });
 
