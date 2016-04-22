@@ -53,6 +53,7 @@ router.route('/')
       res.json({ success: true, redirect : '/articles'});
     })
     .catch(function (err) {
+      console.log(err);
       res.json({ success: false, errors: {}});
     });
   })

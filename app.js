@@ -8,7 +8,12 @@ var articlesRoute = require('./routes/articles');
 var logger = require('./lib/middleware/logger');
 var allowTracking = require('./lib/middleware/allowTracking');
 
-var conn = require('./db/db');
+if(module.parent) {
+  var conn = require('./db/db');
+} else {
+  var conn = require('./db/db')();
+}
+
 var products = require('./models/products');
 var articles = require('./models/articles');
 
