@@ -4,7 +4,7 @@ var router = express.Router();
 var validateBody = require('../lib/middleware/validateBody');
 
 router.get('/:id/edit', function(req, res) {
-  req.conn.query('SELECT name, price, inventory FROM products WHERE id = $1', req.params.id)
+  req.products.getProduct(req.params.id)
   .then(function(product) {
     res.render('edit', {
       title: product.name,
@@ -25,10 +25,9 @@ router.get('/new', function(req, res) {
 router.route('/:id')
   .put(validateBody({'name' : 'string', 'price': 'string',
    'inventory': 'number'}), function(req, res) {
-    req.conn.query('UPDATE products SET name = $1, price = $2,' +
-      ' inventory = $3 WHERE id = $4',
-      [req.body.name, req.body.price, req.body.inventory, req.params.id])
+    req.products.editProduct(req.params.id, req.body)
     .then(function() {
+      console.log('success');
       res.json({ success: true, redirect : '/products'});
     })
     .catch(function(error) {
@@ -36,21 +35,19 @@ router.route('/:id')
     });
   })
   .delete(function(req, res) {
-    req.conn.query('DELETE FROM products WHERE id = $1', req.params.id)
-      .then(function() {
-        res.json({success : true});
-      })
-      .catch(function(err) {
-        res.json({success : false});
-      });
+    req.products.deleteProduct(req.params.id)
+    .then(function() {
+      res.json({success : true});
+    })
+    .catch(function(err) {
+      res.json({success : false});
+    });
   });
 
 router.route('/')
   .post(validateBody({'name' : 'string', 'price': 'string',
     'inventory': 'number'}),function(req, res) {
-    req.conn.query('INSERT INTO products (name, price, inventory)' +
-      'VALUES ($1, $2, $3)', [req.body.name, req.body.price,
-      req.body.inventory])
+    req.products.addProduct(req.body)
     .then(function() {
       res.json({ success: true, redirect : '/products'});
     })
@@ -59,13 +56,12 @@ router.route('/')
     });
   })
   .get(function(req, res) {
-    req.conn.query('SELECT * FROM products ORDER BY id ASC')
+    req.products.getAll()
     .then(function(products) {
-      console.log('GET');
-      res.render('productIndex', { title: 'Products', list: products});
+        res.render('productIndex', { title: 'Products', list: products});
     })
     .catch(function(err) {
-      res.render('error/500');
+        res.render('error/500');
     });
   });
 

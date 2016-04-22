@@ -74,6 +74,8 @@ var productRoute = require('./routes/products');
 var articlesRoute = require('./routes/articles');
 var logger = require('./lib/middleware/logger');
 var allowTracking = require('./lib/middleware/allowTracking');
+var products = require('./models/products');
+var articles = require('./models/articles');
 
 var app = express();
 
@@ -84,7 +86,8 @@ app.use(express.static('./public'));
 app.use(bodyParser.urlencoded({ extended : true }));
 
 app.use(function(req, res, next) {
-  req.conn = conn;
+  req.products = products(conn);
+  req.articles = articles(conn);
   next();
 });
 
